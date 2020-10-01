@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "ReportProcessor (Development)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ENVIRONMENT": "Development"
+      }
+    },
+    "ReportProcessor (Production)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ENVIRONMENT": "Production"
+      }
+    }
+  }
+}
