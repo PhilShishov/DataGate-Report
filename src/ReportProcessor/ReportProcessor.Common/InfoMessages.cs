@@ -14,6 +14,7 @@
         public const string RemoveUser = "{0} was removed.";
 
         public const string EndLine = "-------------------------------------------------------------";
+        public const string StartLine = "----------------------------{0}------------------------------";
 
 
     }

@@ -23,19 +23,18 @@
             {
                 string fullPath = string.Format(GlobalConstants.FolderToWatch, folders[i]);
 
+                Console.WriteLine(string.Format(InfoMessages.StartLine, folders[i]));
                 int empty = Directory.GetFiles(fullPath).Length;
 
                 if (empty == 0)
                 {
                     Console.WriteLine(string.Format(InfoMessages.CheckedFolder, folders[i]));
-                    Console.WriteLine(InfoMessages.EndLine);
                     continue;
                 }
 
                 CheckFolder(folders[i], fullPath);
 
                 Console.WriteLine(InfoMessages.ProcessedFolder);
-                Console.WriteLine(InfoMessages.EndLine);
             }
         }
 
@@ -58,10 +57,20 @@
                 var currentFileName = Path.GetFileName(fileArray[i]);
 
                 Console.WriteLine($"Processing {currentFileName}...");
+                Console.WriteLine(InfoMessages.EndLine);
+
 
                 try
                 {
                     var csvList = Reader.ProcessData(provider, fullFilePath);
+
+                    if (csvList == null || csvList.Count == 0)
+                    {
+                        Console.WriteLine($"File: {currentFileName} moved to Error");
+                        File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir));
+                        Console.WriteLine(InfoMessages.EndLine);
+                        break;
+                    }
 
                     DataTable csvData = csvList.ToDataTable();
                     Console.WriteLine("Rows count:" + csvData.Rows.Count);
@@ -73,7 +82,7 @@
                     //    Console.WriteLine($"File: {currentFileName} moved to Error");
                     //    File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir));
                     //    File.Delete(fullFilePath);
-                    //    return;
+                    //    break;
                     //}
 
                     //if (!File.Exists(GlobalConstants.FolderOnSuccess + currentFileName))
@@ -87,6 +96,7 @@
                     //    File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir), true);
                     //    File.Delete(fullFilePath);
                     //}
+
                 }
                 catch (IOException ex)
                 {

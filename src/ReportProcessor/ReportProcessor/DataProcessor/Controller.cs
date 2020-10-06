@@ -6,18 +6,18 @@
 
     public static class Controller
     {
-        public static bool SecurityCheck(ShareClassDto shareClass)
+        public static bool SecurityCheck(ShareClassDto shareClass, string isin, string currency)
         {
-            bool hasError = false;
+            bool hasPassedCheck = true;
 
             // First security check: ISIN and currency in report are existing and the same as in internal DB
             if (shareClass == null)
             {
-                Console.WriteLine($"Error: {shareClass.Isin} with {shareClass.Currency} currency was not found!");
-                hasError = true;
+                Console.WriteLine($"Error: {isin} with {currency} currency was not found!");
+                hasPassedCheck = false;
             }
 
-            return hasError;
+            return hasPassedCheck;
         }
     }
 }

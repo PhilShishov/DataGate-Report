@@ -16,6 +16,9 @@
         {
             var records = new List<TimeSerie>();
 
+            // Retrieve shareclass sql table by date of today to perform security checks
+            var shareClassList = SqlService.GetShareClassList(DateTime.Today);
+
             try
             {
                 using (var streamReader = new StreamReader(csv_file_path))
@@ -52,16 +55,14 @@
                                 types.Add(type);
                             }
 
-                            // Retrieve shareclass sql table by date of today to perform comparison
-                            var shareClassList = SqlService.GetShareClassList(DateTime.Today);
-
                             var currentShareClass = shareClassList.FirstOrDefault(sc => sc.Isin == isin && sc.Currency == currency);
 
-                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass);
+                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, isin, currency);
 
-                            if (didPassSecurity)
+                            if (!didPassSecurity)
                             {
-
+                                records = null;
+                                break;
                             }
 
                             int id_sc = currentShareClass.Id;
