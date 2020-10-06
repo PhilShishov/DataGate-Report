@@ -3,5 +3,6 @@
     public static class ErrorMessages
     {
         public const string InvalidData = "Invalid data!";
+        public const string InvalidIsin = "Error: {0} with {1} currency was not found!";
     }
 }

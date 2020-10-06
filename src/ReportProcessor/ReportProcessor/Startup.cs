@@ -5,7 +5,6 @@
     using ReportProcessor.Common;
     using ReportProcessor.Core;
     using ReportProcessor.Core.Contracts;
-    using ReportProcessor.Data;
 
     public class Startup
     {
@@ -21,7 +20,7 @@
 
         private static void ConfigureBuilder()
         {
-            var environmentName = Environment.GetEnvironmentVariable("ENVIRONMENT");
+            var environmentName = Environment.GetEnvironmentVariable(GlobalConstants.EnvironmentVariable);
 
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

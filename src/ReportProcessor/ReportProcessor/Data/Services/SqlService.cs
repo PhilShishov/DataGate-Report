@@ -19,7 +19,7 @@
                 using (var bulkCopy = new SqlBulkCopy(dbConnection))
                 {
                     bulkCopy.EnableStreaming = true;
-                    bulkCopy.DestinationTableName = "tb_shareclass_ts_test";
+                    bulkCopy.DestinationTableName = GlobalConstants.TableDestination;
 
                     foreach (var column in csvData.Columns)
                     {
@@ -53,10 +53,10 @@
 
                 var sqlDate = date.ToString(GlobalConstants.RequiredSqlDateTimeFormat, CultureInfo.InvariantCulture);
 
-                command.CommandText = $"select distinct sc_id, sc_isinCode, sc_currency from tb_historyShareClass";
-                //command.CommandText = $"select * from fn_timeseries_shareclass ('{sqlDate}', '{isin}'";
+                command.CommandText = GlobalConstants.FunctionShareClass;
 
-                //select* from fn_timeseries_shareclass('20190101', 'LU0828733419')
+                //command.CommandText = $"select * from fn_timeseries_shareclass ('{sqlDate}'";
+                //select* from fn_timeseries_shareclass('20190101')
 
                 var reader = command.ExecuteReader();
 
@@ -66,9 +66,9 @@
                     {
                         shareClassList.Add(item: new ShareClassDto
                         {
-                            Id = int.Parse(reader["sc_id"].ToString()),
-                            Isin = reader["sc_isinCode"].ToString(),
-                            Currency = reader["sc_currency"].ToString(),
+                            Id = int.Parse(reader[GlobalConstants.ColumnId].ToString()),
+                            Isin = reader[GlobalConstants.ColumnIsin].ToString(),
+                            Currency = reader[GlobalConstants.ColumnCurrency].ToString(),
                         });
                     }
                 }

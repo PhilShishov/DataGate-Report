@@ -1,7 +1,7 @@
 ﻿namespace ReportProcessor.DataProcessor
 {
     using System;
-
+    using ReportProcessor.Common;
     using ReportProcessor.Dtos;
 
     public static class Controller
@@ -13,7 +13,7 @@
             // First security check: ISIN and currency in report are existing and the same as in internal DB
             if (shareClass == null)
             {
-                Console.WriteLine($"Error: {isin} with {currency} currency was not found!");
+                Console.WriteLine(string.Format(ErrorMessages.InvalidIsin, isin, currency));
                 hasPassedCheck = false;
             }
 

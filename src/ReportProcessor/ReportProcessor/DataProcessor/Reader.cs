@@ -7,11 +7,18 @@
     using System.Linq;
 
     using CsvHelper;
+    using ReportProcessor.Common;
     using ReportProcessor.Data.Models;
     using ReportProcessor.Data.Services;
 
     public class Reader
     {
+        // XML Headers index
+        private const int IndexDate = 0;
+        private const int IndexCurrency = 1;
+        private const int IndexIsin = 2;
+        private const int CountHeadersToSkip = 3;
+
         public static List<TimeSerie> ProcessData(Provider provider, string csv_file_path)
         {
             var records = new List<TimeSerie>();
@@ -25,7 +32,7 @@
                 {
                     using (CsvReader reader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
                     {
-                        //reader.Configuration.Delimiter = ";";
+                        reader.Configuration.Delimiter = GlobalConstants.RequiredDelimiter;
                         reader.Read();
                         reader.ReadHeader();
 
@@ -34,17 +41,17 @@
                             var headers = provider.Headers.ToArray();
 
                             var providerId = provider.Id;
-                            var dateField = reader.GetField(headers[0].Name);
+                            var dateField = reader.GetField(headers[IndexDate].Name);
                             var dateReport = new DateTime(Convert.ToInt32(dateField.Substring(0, 4)), // Year
                                     Convert.ToInt32(dateField.Substring(4, 2)), // Month
                                     Convert.ToInt32(dateField.Substring(6, 2)));// Day
-                            var currency = reader.GetField(headers[1].Name);
-                            var isin = reader.GetField(headers[2].Name);
+                            var currency = reader.GetField(headers[IndexCurrency].Name);
+                            var isin = reader.GetField(headers[IndexIsin].Name);
 
                             // Map time series types between xml and source 
                             var types = new List<TimeSerieType>();
 
-                            for (int i = 3; i < headers.Length; i++)
+                            for (int i = CountHeadersToSkip; i < headers.Length; i++)
                             {
                                 var type = new TimeSerieType
                                 {
