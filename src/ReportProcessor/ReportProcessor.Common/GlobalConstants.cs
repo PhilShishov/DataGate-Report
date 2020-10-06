@@ -18,6 +18,7 @@
         public const string RequiredSqlDateTimeFormat = "yyyyMMdd";
 
         // Business
+        public const string FilePathLog = @"D:\Reports\Logs\LOG_{0}.txt";
         public const string FolderToWatch = @"D:\Reports\{0}\downloads\";
         public const string FolderOnSuccess = @"D:\Reports\{0}\historic\";
         public const string FolderOnError = @"D:\Reports\{0}\error\";
@@ -25,9 +26,9 @@
         public static string[] ReportFolders = new string[3] { "EDR-SFTP01", "NT", "CACEIS" };
         public const string XmlRoot = "Providers";
         public const string RequiredDelimiter = ";";
+        public const string HeadersFileName = "headers-{0}.xml";
 
         // SQL Server functions, tables and columns
-
         public const string TableDestination = "tb_shareclass_ts_test";
         public const string FunctionShareClass = "select distinct sc_id, sc_isinCode, sc_currency from tb_historyShareClass";
         public const string ColumnId = "sc_id";

@@ -24,6 +24,10 @@
             {
                 string fullPath = string.Format(GlobalConstants.FolderToWatch, folders[i]);
 
+                // Error logger file
+                var date = DateTime.Now.ToString(GlobalConstants.RequiredSqlDateTimeFormat);
+                TextWriter log = new StreamWriter(string.Format(GlobalConstants.FilePathLog, date));
+
                 Console.WriteLine(string.Format(InfoMessages.LineHeader, folders[i]));
                 int empty = Directory.GetFiles(fullPath).Length;
 
@@ -104,7 +108,7 @@
         }
 
         private static Provider RetrieveHeadersFromProvider(string reportDir, string baseDir)
-            => Deserializer.ImportHeaders(File.ReadAllText(baseDir + $"headers-{reportDir}.xml"));
+            => Deserializer.ImportHeaders(File.ReadAllText(baseDir + string.Format(GlobalConstants.HeadersFileName, reportDir)));
 
         private static string GetProjectDirectory()
         {
@@ -114,9 +118,6 @@
 
             return relativePath;
         }
-
-        // Error logger file
-        //TextWriter log = new StreamWriter(@"Logs\log.txt");
 
         //Log($"Folder {folder} is checked.");
 
