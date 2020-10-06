@@ -9,6 +9,7 @@
     using ReportProcessor.Common;
     using ReportProcessor.Core.Contracts;
     using ReportProcessor.Data.Models;
+    using ReportProcessor.Data.Services;
     using ReportProcessor.DataProcessor;
     using ToDataTable;
 
@@ -23,7 +24,7 @@
             {
                 string fullPath = string.Format(GlobalConstants.FolderToWatch, folders[i]);
 
-                Console.WriteLine(string.Format(InfoMessages.StartLine, folders[i]));
+                Console.WriteLine(string.Format(InfoMessages.LineHeader, folders[i]));
                 int empty = Directory.GetFiles(fullPath).Length;
 
                 if (empty == 0)
@@ -34,7 +35,7 @@
 
                 CheckFolder(folders[i], fullPath);
 
-                Console.WriteLine(InfoMessages.ProcessedFolder);
+                Console.WriteLine(string.Format(InfoMessages.CheckedFolder, folders[i]));
             }
         }
 
@@ -45,20 +46,19 @@
                              fn.ToLower().EndsWith(GlobalConstants.CSVFileExtension))
                 .ToArray();
 
-            Console.WriteLine($"Folder {reportDir} is being checked.");
-            Console.WriteLine($"File count: {fileArray.Length}");
-            Console.WriteLine("Processing...");
+            Console.WriteLine(string.Format(InfoMessages.CheckingFolder, reportDir));
+            Console.WriteLine(string.Format(InfoMessages.FileCountInFolder, fileArray.Length));
+            Console.WriteLine(InfoMessages.Processing);
 
             for (int i = 0; i < fileArray.Length; i++)
             {
                 var projectDir = GetProjectDirectory();
-                var provider = RetrieveHeadersFromProvider(reportDir, projectDir + @"Datasets/");
+                var provider = RetrieveHeadersFromProvider(reportDir, projectDir + GlobalConstants.FolderHeaders);
                 var fullFilePath = fileArray[i];
                 var currentFileName = Path.GetFileName(fileArray[i]);
 
-                Console.WriteLine($"Processing {currentFileName}...");
-                Console.WriteLine(InfoMessages.EndLine);
-
+                Console.WriteLine(string.Format(InfoMessages.ProcessingFile, currentFileName));
+                Console.WriteLine(string.Format(InfoMessages.LineHeader, reportDir));
 
                 try
                 {
@@ -66,37 +66,31 @@
 
                     if (csvList == null || csvList.Count == 0)
                     {
-                        Console.WriteLine($"File: {currentFileName} moved to Error");
+                        Console.WriteLine(string.Format(InfoMessages.FileMoveError, currentFileName));
                         File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir));
-                        Console.WriteLine(InfoMessages.EndLine);
+                        Console.WriteLine(string.Format(InfoMessages.LineHeader, reportDir));
                         break;
                     }
 
                     DataTable csvData = csvList.ToDataTable();
-                    Console.WriteLine("Rows count:" + csvData.Rows.Count);
+                    Console.WriteLine(InfoMessages.RowsCountFile + csvData.Rows.Count);
 
-                    //bool isInserted = SqlService.IsDataInsertedDB(csvData);
+                    bool isInserted = SqlService.UploadData(csvData);
 
-                    //if (!isInserted)
-                    //{
-                    //    Console.WriteLine($"File: {currentFileName} moved to Error");
-                    //    File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir));
-                    //    File.Delete(fullFilePath);
-                    //    break;
-                    //}
+                    if (!isInserted)
+                    {
+                        Console.WriteLine(string.Format(InfoMessages.FileMoveError, currentFileName));
+                        File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir));
+                        File.Delete(fullFilePath);
+                        break;
+                    }
 
-                    //if (!File.Exists(GlobalConstants.FolderOnSuccess + currentFileName))
-                    //{
-                    //    Console.WriteLine($"File: {currentFileName} moved to Historic");
-                    //    File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnSuccess + currentFileName, reportDir));
-                    //    File.Delete(fullFilePath);
-                    //}
-                    //else
-                    //{
-                    //    File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir), true);
-                    //    File.Delete(fullFilePath);
-                    //}
-
+                    if (!File.Exists(GlobalConstants.FolderOnSuccess + currentFileName))
+                    {
+                        Console.WriteLine(string.Format(InfoMessages.FileMoveSuccess, currentFileName));
+                        File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnSuccess + currentFileName, reportDir));
+                        File.Delete(fullFilePath);
+                    }
                 }
                 catch (IOException ex)
                 {
@@ -110,15 +104,13 @@
         }
 
         private static Provider RetrieveHeadersFromProvider(string reportDir, string baseDir)
-            => DataProcessor
-            .Deserializer
-            .ImportHeaders(File.ReadAllText(baseDir + $"headers-{reportDir}.xml"));
+            => Deserializer.ImportHeaders(File.ReadAllText(baseDir + $"headers-{reportDir}.xml"));
 
         private static string GetProjectDirectory()
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             var directoryName = Path.GetFileName(currentDirectory);
-            var relativePath = directoryName.StartsWith("netcoreapp") ? @"../../../" : string.Empty;
+            var relativePath = directoryName.StartsWith(GlobalConstants.NetCoreApp) ? @"../../../" : string.Empty;
 
             return relativePath;
         }

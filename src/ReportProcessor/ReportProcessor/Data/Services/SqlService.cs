@@ -10,7 +10,7 @@
 
     public class SqlService
     {
-        public static bool IsDataInsertedDB(DataTable csvData)
+        public static bool UploadData(DataTable csvData)
         {
             bool isInserted = true;
             using (var dbConnection = new SqlConnection(Startup.ConnectionString))
