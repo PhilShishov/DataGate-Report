@@ -1,7 +1,5 @@
-﻿
-namespace ReportProcessor.DataProcessor
+﻿namespace ReportProcessor.DataProcessor
 {
-    using System.Collections.Generic;
     using System.IO;
     using System.Xml.Serialization;
 

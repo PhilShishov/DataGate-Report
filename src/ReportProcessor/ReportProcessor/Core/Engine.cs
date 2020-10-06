@@ -9,7 +9,7 @@
     using ReportProcessor.Common;
     using ReportProcessor.Core.Contracts;
     using ReportProcessor.Data.Models;
-    using ReportProcessor.Services;
+    using ReportProcessor.DataProcessor;
     using ToDataTable;
 
     public class Engine : IEngine
@@ -27,13 +27,15 @@
 
                 if (empty == 0)
                 {
-                    Console.WriteLine(InfoMessages.CheckedFolder);
+                    Console.WriteLine(string.Format(InfoMessages.CheckedFolder, folders[i]));
+                    Console.WriteLine(InfoMessages.EndLine);
                     continue;
                 }
 
                 CheckFolder(folders[i], fullPath);
 
                 Console.WriteLine(InfoMessages.ProcessedFolder);
+                Console.WriteLine(InfoMessages.EndLine);
             }
         }
 
@@ -44,7 +46,7 @@
                              fn.ToLower().EndsWith(GlobalConstants.CSVFileExtension))
                 .ToArray();
 
-            Console.WriteLine($"Folder {reportDir} is checked.");
+            Console.WriteLine($"Folder {reportDir} is being checked.");
             Console.WriteLine($"File count: {fileArray.Length}");
             Console.WriteLine("Processing...");
 
@@ -59,13 +61,12 @@
 
                 try
                 {
-                    bool hasErrors = false;
-                    var csvList = CsvReaderService.GetDataFromCSVFile(provider, fullFilePath);
+                    var csvList = Reader.ProcessData(provider, fullFilePath);
 
                     DataTable csvData = csvList.ToDataTable();
                     Console.WriteLine("Rows count:" + csvData.Rows.Count);
 
-                    bool isInserted = SqlService.IsDataInsertedDB(csvData);
+                    //bool isInserted = SqlService.IsDataInsertedDB(csvData);
 
                     //if (!isInserted)
                     //{
