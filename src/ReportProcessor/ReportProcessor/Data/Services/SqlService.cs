@@ -1,16 +1,18 @@
 ﻿namespace ReportProcessor.Data.Services
 {
-    using ReportProcessor.Common;
-    using ReportProcessor.Dtos;
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Globalization;
 
+    using NLog;
+    using ReportProcessor.Common;
+    using ReportProcessor.Dtos;
+
     public class SqlService
     {
-        public static bool UploadData(DataTable csvData)
+        public static bool UploadData(DataTable csvData, Logger logger)
         {
             bool isInserted = true;
             using (var dbConnection = new SqlConnection(Startup.ConnectionString))
@@ -33,15 +35,15 @@
                     catch (Exception ex)
                     {
                         isInserted = false;
-                        Console.WriteLine(ex.GetType().ToString());
-                        Console.WriteLine(ex.Message);
+                        logger.Error(ex.GetType().ToString());
+                        logger.Error(ex.Message);
                     }
                 }
             }
             return isInserted;
         }
 
-        public static IEnumerable<ShareClassDto> GetShareClassList(DateTime date)
+        public static IEnumerable<ShareClassDto> GetShareClassList(DateTime date, Logger logger)
         {
             var shareClassList = new List<ShareClassDto>();
             using (SqlConnection connection = new SqlConnection())
@@ -74,8 +76,8 @@
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.GetType().ToString());
-                    Console.WriteLine(ex.Message);
+                    logger.Error(ex.GetType().ToString());
+                    logger.Error(ex.Message);
                 }
             }
 

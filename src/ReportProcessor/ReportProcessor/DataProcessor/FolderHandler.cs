@@ -36,7 +36,7 @@
 
                 try
                 {
-                    var csvList = DataHandler.ProcessData(provider, fullFilePath);
+                    var csvList = DataHandler.ProcessData(provider, fullFilePath, logger);
 
                     if (csvList == null || csvList.Count == 0)
                     {
@@ -49,7 +49,7 @@
                     DataTable csvData = csvList.ToDataTable();
                     logger.Info(InfoMessages.RowsCountFile + csvData.Rows.Count);
 
-                    bool isInserted = SqlService.UploadData(csvData);
+                    bool isInserted = SqlService.UploadData(csvData, logger);
 
                     if (!isInserted)
                     {

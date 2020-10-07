@@ -7,6 +7,7 @@
     using System.Linq;
 
     using CsvHelper;
+    using NLog;
     using ReportProcessor.Common;
     using ReportProcessor.Data.Models;
     using ReportProcessor.Data.Services;
@@ -19,12 +20,12 @@
         private const int IndexIsin = 2;
         private const int CountHeadersToSkip = 3;
 
-        public static List<TimeSerie> ProcessData(Provider provider, string csv_file_path)
+        public static List<TimeSerie> ProcessData(Provider provider, string csv_file_path, Logger logger)
         {
             var records = new List<TimeSerie>();
 
             // Retrieve shareclass sql table by date of today to perform security checks
-            var shareClassList = SqlService.GetShareClassList(DateTime.Today);
+            var shareClassList = SqlService.GetShareClassList(DateTime.Today, logger);
 
             try
             {
@@ -64,7 +65,9 @@
 
                             var currentShareClass = shareClassList.FirstOrDefault(sc => sc.Isin == isin && sc.Currency == currency);
 
-                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, isin, currency);
+
+                            // Perform security checks before create new entity
+                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, isin, currency, logger);
 
                             if (!didPassSecurity)
                             {
@@ -94,7 +97,7 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                logger.Error(ex.Message);
                 return null;
             }
             return records;
