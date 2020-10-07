@@ -11,7 +11,7 @@
     using ReportProcessor.Data.Models;
     using ReportProcessor.Data.Services;
 
-    public class Reader
+    public class DataHandler
     {
         // XML Headers index
         private const int IndexDate = 0;

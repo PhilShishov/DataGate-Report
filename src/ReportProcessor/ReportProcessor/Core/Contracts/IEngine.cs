@@ -1,7 +1,10 @@
-﻿namespace ReportProcessor.Core.Contracts
+﻿
+namespace ReportProcessor.Core.Contracts
 {
+    using NLog;
+
     public interface IEngine
     {
-        void Run();
+        void Run(Logger logger);
     }
 }
