@@ -15,6 +15,11 @@
 
     public class Engine : IEngine
     {
+        //private readonly ILogger logger;
+        //public Engine(ILogger logger)
+        //{
+        //    this.logger = logger;
+        //}
         [PermissionSet(SecurityAction.Demand, Name = GlobalConstants.PermissionSetFullTrust)]
         public void Run()
         {
@@ -24,9 +29,9 @@
             {
                 string fullPath = string.Format(GlobalConstants.FolderToWatch, folders[i]);
 
-                // Error logger file
-                var date = DateTime.Now.ToString(GlobalConstants.RequiredSqlDateTimeFormat);
-                TextWriter log = new StreamWriter(string.Format(GlobalConstants.FilePathLog, date));
+                //// Error logger file
+                //var date = DateTime.Now.ToString(GlobalConstants.RequiredSqlDateTimeFormat);
+                //TextWriter log = new StreamWriter(string.Format(GlobalConstants.FilePathLog, date));
 
                 Console.WriteLine(string.Format(InfoMessages.LineHeader, folders[i]));
                 int empty = Directory.GetFiles(fullPath).Length;
@@ -37,13 +42,13 @@
                     continue;
                 }
 
-                CheckFolder(folders[i], fullPath);
+                //ProcessFolder(folders[i], fullPath);
 
                 Console.WriteLine(string.Format(InfoMessages.CheckedFolder, folders[i]));
             }
         }
 
-        private void CheckFolder(string reportDir, string fullFolderPath)
+        private void ProcessFolder(string reportDir, string fullFolderPath)
         {
             var fileArray = Directory.EnumerateFiles(fullFolderPath, "*.*")
                 .Where(fn => fn.ToLower().EndsWith(GlobalConstants.ExcelFileExtension) ||
@@ -107,6 +112,13 @@
             }
         }
 
+        //// Write text
+        //private void Log(string strText)
+        //{
+        //    Console.WriteLine(strText);
+        //    log.WriteLine(strText);
+        //}
+
         private static Provider RetrieveHeadersFromProvider(string reportDir, string baseDir)
             => Deserializer.ImportHeaders(File.ReadAllText(baseDir + string.Format(GlobalConstants.HeadersFileName, reportDir)));
 
@@ -125,13 +137,6 @@
         //{
         //    Console.WriteLine();
         //    log.WriteLine();
-        //}
-
-        //Write text
-        //private void Log(string strText)
-        //{
-        //    Console.WriteLine(strText);
-        //    log.WriteLine(strText);
         //}
     }
 }
