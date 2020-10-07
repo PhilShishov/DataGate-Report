@@ -31,11 +31,9 @@
                 var fullFilePath = fileArray[i];
                 var currentFileName = Path.GetFileName(fileArray[i]);
 
-                logger.Info(string.Format(InfoMessages.ProcessingFile, currentFileName));
-                logger.Info(string.Format(InfoMessages.LineHeader, reportDir));
-
                 try
                 {
+                    logger.Info(string.Format(InfoMessages.ProcessingFile, currentFileName));
                     var csvList = DataHandler.ProcessData(provider, fullFilePath, logger);
 
                     if (csvList == null || csvList.Count == 0)

@@ -7,7 +7,7 @@
         public const string CheckingFolder = "Folder {0} is being checked.";
         public const string CheckedFolder = "Folder {0} is checked.";
         public const string Processing = "Processing...";
-        public const string ProcessingFile = "Processing {}...";
+        public const string ProcessingFile = "Processing {0}...";
         public const string FileCountInFolder = "File count: {0}";
         public const string RowsCountFile = "Rows count:";
 

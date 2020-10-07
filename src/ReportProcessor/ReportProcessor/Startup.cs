@@ -1,7 +1,5 @@
 ﻿namespace ReportProcessor
 {
-    using System;
-
     using Microsoft.Extensions.Configuration;
     using NLog;
     using ReportProcessor.Common;
@@ -22,12 +20,6 @@
 
                 IEngine engine = new Engine();
                 engine.Run(logger);
-            }
-            catch (Exception ex)
-            {
-                // NLog: catch any exception and log it.
-                logger.Error(ex, ErrorMessages.StopProgramException);
-                throw;
             }
             finally
             {
