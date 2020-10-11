@@ -22,7 +22,6 @@
 
             logger.Info(string.Format(InfoMessages.CheckingFolder, reportDir));
             logger.Info(string.Format(InfoMessages.FileCountInFolder, fileArray.Length));
-            logger.Info(InfoMessages.Processing);
 
             for (int i = 0; i < fileArray.Length; i++)
             {

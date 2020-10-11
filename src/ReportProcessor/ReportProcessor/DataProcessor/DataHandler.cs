@@ -65,7 +65,6 @@
 
                             var currentShareClass = shareClassList.FirstOrDefault(sc => sc.Isin == isin && sc.Currency == currency);
 
-
                             // Perform security checks before create new entity
                             bool didPassSecurity = Controller.SecurityCheck(currentShareClass, isin, currency, logger);
 
