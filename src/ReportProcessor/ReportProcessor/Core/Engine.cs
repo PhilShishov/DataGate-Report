@@ -17,7 +17,8 @@
 
             for (int i = 0; i < folders.Length; i++)
             {
-                string fullPath = string.Format(GlobalConstants.FolderToWatch, folders[i]);
+                // Linux server ubuntu path
+                string fullPath = Directory.GetDirectoryRoot("home") + string.Format(GlobalConstants.FolderToWatch, folders[i]);
                 logger.Info(string.Format(InfoMessages.LineHeader, folders[i]));
                 int empty = Directory.GetFiles(fullPath).Length;
 
