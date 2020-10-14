@@ -1,6 +1,6 @@
 # DataGate Report Processor
 
-.Net Core console application running on Ubuntu 20.04 SFTP Linux Server.
+.Net Core console application running on Ubuntu 20.04 SFTP Linux Server. </br>
 This tool was created to manage the reporting part of the [DataGate Web Platform](https://github.com/PhilShishov/DataGate) </br>
 Main function:
  1. Receive input from client AuM reports: EDR, NT and CACEIS
