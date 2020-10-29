@@ -25,6 +25,8 @@
         {
             var records = new List<TimeSerie>();
 
+            bool didPassSecurity = true;
+
             try
             {
                 // Retrieve shareclass sql table by date of today to perform security checks
@@ -76,12 +78,12 @@
                                 sc.ExpectedNavDate == dto.DateReport);
 
                             // Check result from security before creating new entity
-                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, dto, logger);
+                            didPassSecurity = Controller.SecurityCheck(currentShareClass, dto, logger);
 
                             if (!didPassSecurity)
                             {
                                 records = null;
-                                break;
+                                continue;
                             }
 
                             int id_sc = currentShareClass.IdShareClass;
@@ -106,9 +108,15 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message);
+                didPassSecurity = true;
+                logger.Error(ex.Message);                
+            }
+
+            if (!didPassSecurity)
+            {
                 return null;
             }
+
             return records;
         }
     }
