@@ -56,7 +56,6 @@
                 var sqlDate = date.ToString(GlobalConstants.RequiredSqlDateTimeFormat, CultureInfo.InvariantCulture);
 
                 command.CommandText = string.Format(GlobalConstants.FunctionShareClass, sqlDate);
-                //command.CommandText = $"select * from dbo.fn_get_active_shares_expected_nav_date ('{sqlDate}')";
 
                 var reader = command.ExecuteReader();
 

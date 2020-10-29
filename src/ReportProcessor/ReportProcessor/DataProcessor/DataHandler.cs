@@ -11,6 +11,7 @@
     using ReportProcessor.Common;
     using ReportProcessor.Data.Models;
     using ReportProcessor.Data.Services;
+    using ReportProcessor.Dtos;
 
     public class DataHandler
     {
@@ -41,15 +42,16 @@
                         {
                             var headers = provider.Headers.ToArray();
 
-                            //HeadersDto
+                            //Expected result coming from official file - isin, currencyShare, dateReport
+                            ExpectedResultDto dto = new ExpectedResultDto();
 
                             var providerId = provider.Id;
                             var dateField = reader.GetField(headers[IndexNavDate].Name);
-                            var dateReport = new DateTime(Convert.ToInt32(dateField.Substring(0, 4)), // Year
+                            dto.DateReport = new DateTime(Convert.ToInt32(dateField.Substring(0, 4)), // Year
                                     Convert.ToInt32(dateField.Substring(4, 2)), // Month
                                     Convert.ToInt32(dateField.Substring(6, 2)));// Day
-                            var currencyShare = reader.GetField(headers[IndexCurrency].Name);
-                            var isin = reader.GetField(headers[IndexIsin].Name);
+                            dto.CurrencyShare = reader.GetField(headers[IndexCurrency].Name);
+                            dto.Isin = reader.GetField(headers[IndexIsin].Name);
 
                             // Map time series types between xml and source 
                             var types = new List<TimeSerieType>();
@@ -67,12 +69,14 @@
 
                             // First security check: ISIN and currency in report are existing and the same as in internal DB
                             // Second security check: Nav date matching expected date from internal DB
-                            var currentShareClass = shareClassList.FirstOrDefault(sc => sc.Isin == isin 
-                            && sc.CurrencyShare == currencyShare 
-                            && sc.ExpectedNavDate == dateReport);
+                            var currentShareClass = shareClassList
+                                .FirstOrDefault(
+                                sc => sc.Isin == dto.Isin && 
+                                sc.CurrencyShare == dto.CurrencyShare && 
+                                sc.ExpectedNavDate == dto.DateReport);
 
                             // Check result from security before creating new entity
-                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, isin, currencyShare, dateReport, logger);
+                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, dto, logger);
 
                             if (!didPassSecurity)
                             {
@@ -87,10 +91,10 @@
                             {
                                 var record = new TimeSerie
                                 {
-                                    date_ts = dateReport,
+                                    date_ts = dto.DateReport,
                                     id_ts = type.Id,
                                     value_ts = type.Value,
-                                    currency_ts = currencyShare,
+                                    currency_ts = dto.CurrencyShare,
                                     provider_ts = providerId,
                                     id_shareclass = id_sc,
                                 };
