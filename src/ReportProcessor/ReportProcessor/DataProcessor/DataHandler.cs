@@ -15,7 +15,7 @@
     public class DataHandler
     {
         // XML Headers index
-        private const int IndexDate = 0;
+        private const int IndexNavDate = 0;
         private const int IndexCurrency = 1;
         private const int IndexIsin = 2;
         private const int CountHeadersToSkip = 3;
@@ -24,11 +24,11 @@
         {
             var records = new List<TimeSerie>();
 
-            // Retrieve shareclass sql table by date of today to perform security checks
-            var shareClassList = SqlService.GetShareClassList(DateTime.Today, logger);
-
             try
             {
+                // Retrieve shareclass sql table by date of today to perform security checks
+                var shareClassList = SqlService.GetShareClassList(DateTime.Today, logger);
+
                 using (var streamReader = new StreamReader(csv_file_path))
                 {
                     using (CsvReader reader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
@@ -41,12 +41,14 @@
                         {
                             var headers = provider.Headers.ToArray();
 
+                            //HeadersDto
+
                             var providerId = provider.Id;
-                            var dateField = reader.GetField(headers[IndexDate].Name);
+                            var dateField = reader.GetField(headers[IndexNavDate].Name);
                             var dateReport = new DateTime(Convert.ToInt32(dateField.Substring(0, 4)), // Year
                                     Convert.ToInt32(dateField.Substring(4, 2)), // Month
                                     Convert.ToInt32(dateField.Substring(6, 2)));// Day
-                            var currency = reader.GetField(headers[IndexCurrency].Name);
+                            var currencyShare = reader.GetField(headers[IndexCurrency].Name);
                             var isin = reader.GetField(headers[IndexIsin].Name);
 
                             // Map time series types between xml and source 
@@ -63,10 +65,14 @@
                                 types.Add(type);
                             }
 
-                            var currentShareClass = shareClassList.FirstOrDefault(sc => sc.Isin == isin && sc.Currency == currency);
+                            // First security check: ISIN and currency in report are existing and the same as in internal DB
+                            // Second security check: Nav date matching expected date from internal DB
+                            var currentShareClass = shareClassList.FirstOrDefault(sc => sc.Isin == isin 
+                            && sc.CurrencyShare == currencyShare 
+                            && sc.ExpectedNavDate == dateReport);
 
-                            // Perform security checks before create new entity
-                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, isin, currency, logger);
+                            // Check result from security before creating new entity
+                            bool didPassSecurity = Controller.SecurityCheck(currentShareClass, isin, currencyShare, dateReport, logger);
 
                             if (!didPassSecurity)
                             {
@@ -74,7 +80,7 @@
                                 break;
                             }
 
-                            int id_sc = currentShareClass.Id;
+                            int id_sc = currentShareClass.IdShareClass;
 
                             // Different time series type creates new entry in DB
                             foreach (var type in types)
@@ -84,7 +90,7 @@
                                     date_ts = dateReport,
                                     id_ts = type.Id,
                                     value_ts = type.Value,
-                                    currency_ts = currency,
+                                    currency_ts = currencyShare,
                                     provider_ts = providerId,
                                     id_shareclass = id_sc,
                                 };

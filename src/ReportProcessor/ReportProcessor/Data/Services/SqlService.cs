@@ -55,10 +55,8 @@
 
                 var sqlDate = date.ToString(GlobalConstants.RequiredSqlDateTimeFormat, CultureInfo.InvariantCulture);
 
-                command.CommandText = GlobalConstants.FunctionShareClass;
-
-                //command.CommandText = $"select * from fn_timeseries_shareclass ('{sqlDate}'";
-                //select* from fn_timeseries_shareclass('20190101')
+                command.CommandText = string.Format(GlobalConstants.FunctionShareClass, sqlDate);
+                //command.CommandText = $"select * from dbo.fn_get_active_shares_expected_nav_date ('{sqlDate}')";
 
                 var reader = command.ExecuteReader();
 
@@ -68,9 +66,12 @@
                     {
                         shareClassList.Add(item: new ShareClassDto
                         {
-                            Id = int.Parse(reader[GlobalConstants.ColumnId].ToString()),
+                            IdSubFund = int.Parse(reader[GlobalConstants.ColumnIdSubFund].ToString()),
+                            CurrencySubFund = reader[GlobalConstants.ColumnCurrencySubFund].ToString(),
+                            IdShareClass = int.Parse(reader[GlobalConstants.ColumnIdShare].ToString()),
                             Isin = reader[GlobalConstants.ColumnIsin].ToString(),
-                            Currency = reader[GlobalConstants.ColumnCurrency].ToString(),
+                            CurrencyShare = reader[GlobalConstants.ColumnCurrencyShare].ToString(),
+                            ExpectedNavDate = DateTime.Parse(reader[GlobalConstants.ColumnExpectedNavDate].ToString()),
                         });
                     }
                 }

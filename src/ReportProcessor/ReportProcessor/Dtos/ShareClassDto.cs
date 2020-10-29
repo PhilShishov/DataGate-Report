@@ -1,11 +1,19 @@
-﻿namespace ReportProcessor.Dtos
+﻿using System;
+
+namespace ReportProcessor.Dtos
 {
     public class ShareClassDto
     {
-        public int Id { get; set; }
+        public int IdSubFund { get; set; }
 
         public string Isin { get; set; }
 
-        public string Currency { get; set; }
+        public string CurrencyShare { get; set; }
+
+        public string CurrencySubFund { get; set; }
+
+        public int IdShareClass { get; set; }
+
+        public DateTime ExpectedNavDate { get; set; }
     }
 }
