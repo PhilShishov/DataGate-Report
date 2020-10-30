@@ -29,8 +29,9 @@
 
             try
             {
+                var creationDate = File.GetCreationTime(csv_file_path);
                 // Retrieve shareclass sql table by date of today to perform security checks
-                var shareClassList = SqlService.GetShareClassList(DateTime.Today, logger);
+                var shareClassList = SqlService.GetShareClassList(creationDate, logger);
 
                 using (var streamReader = new StreamReader(csv_file_path))
                 {
