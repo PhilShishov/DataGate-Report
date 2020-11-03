@@ -21,6 +21,7 @@
             foreach (var dto in providersDto)
             {
                 provider.Id = dto.Provider;
+                provider.Title = dto.Title;
 
                 foreach (var headerDto in dto.Headers)
                 {

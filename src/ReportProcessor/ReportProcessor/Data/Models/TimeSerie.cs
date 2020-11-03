@@ -17,5 +17,7 @@
         public int provider_ts  { get; set; }
 
         public int id_shareclass { get; set; }
+
+        public string file_name { get; set; }
     }
 }

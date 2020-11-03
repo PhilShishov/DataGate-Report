@@ -9,6 +9,9 @@
         [XmlAttribute("id")]
         public int Provider { get; set; }
 
+        [XmlAttribute("title")]
+        public string Title { get; set; }
+
         [XmlArray("Headers")]
         public ImportHeaderDto[] Headers { get; set; }
     }

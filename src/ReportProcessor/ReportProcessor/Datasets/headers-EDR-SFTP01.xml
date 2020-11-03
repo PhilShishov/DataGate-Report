@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- names of the column headers to extract from the EDR report-->
 <Providers>
-  <Provider id="1">
+  <Provider id="1" title="Edmond de Rothschild Asset Management (Luxembourg)">
     <Headers>
       <Header>
         <Name>

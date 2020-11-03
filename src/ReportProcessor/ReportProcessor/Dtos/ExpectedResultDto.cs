@@ -10,5 +10,10 @@
 
         public string CurrencyShare { get; set; }
 
+        public int Id { get; set; }
+
+        public int ProviderId { get; set; }
+
+        public string ProviderName { get; set; }
     }
 }

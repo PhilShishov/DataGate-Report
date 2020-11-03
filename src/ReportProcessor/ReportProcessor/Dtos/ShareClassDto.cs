@@ -15,5 +15,7 @@ namespace ReportProcessor.Dtos
         public int IdShareClass { get; set; }
 
         public DateTime ExpectedNavDate { get; set; }
+
+        public string Provider { get; set; }
     }
 }

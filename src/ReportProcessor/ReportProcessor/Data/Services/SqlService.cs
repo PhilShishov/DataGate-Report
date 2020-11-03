@@ -71,6 +71,7 @@
                             Isin = reader[GlobalConstants.ColumnIsin].ToString(),
                             CurrencyShare = reader[GlobalConstants.ColumnCurrencyShare].ToString(),
                             ExpectedNavDate = DateTime.Parse(reader[GlobalConstants.ColumnExpectedNavDate].ToString()),
+                            Provider = reader[GlobalConstants.ColumnCompany].ToString(),
                         });
                     }
                 }
