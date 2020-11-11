@@ -29,11 +29,12 @@
 
             try
             {
-                //var creationDate = File.GetCreationTime(csv_file_path);
+                var queryDate = File.GetCreationTime(csv_file_path);
 
-                var creationDate = new DateTime(2020, 07, 23);
+                // Test date
+                //var queryDate = new DateTime(2020, 07, 23);
                 // Retrieve shareclass sql table by date of today to perform security checks
-                var actualShareClassList = SqlService.GetShareClassList(creationDate, logger);
+                var actualShareClassList = SqlService.GetShareClassList(queryDate, logger);
 
                 using (var streamReader = new StreamReader(csv_file_path))
                 {

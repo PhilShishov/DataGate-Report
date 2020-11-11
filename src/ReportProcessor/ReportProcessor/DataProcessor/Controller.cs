@@ -13,7 +13,7 @@
         {
             bool hasPassedSecurity = true;
 
-            // First security check: ISIN and currency in report are existing and the same as in internal DB
+            // Security check 1: ISIN and currency in report are existing and the same as in internal DB
             var shareClass = actualShareClassList
                 .FirstOrDefault(
                 sc => sc.Isin == dto.Isin &&
@@ -32,21 +32,21 @@
                 hasPassedSecurity = false;
             }
 
-            // Second security check: Provider matching
+            // Security check 2: Provider matching
             if (shareClass.Provider != dto.ProviderName)
             {
                 logger.Error(string.Format(ErrorMessages.InvalidProvider, dto.Isin, dto.ProviderName));
                 hasPassedSecurity = false;
             }
 
-            // Third security check: Nav date matching expected date from internal DB
+            // Security check 3: Nav date matching expected date from internal DB
             if (shareClass.ExpectedNavDate != dto.DateReport)
             {
                 logger.Error(string.Format(ErrorMessages.InvalidExpectedDate, dto.Isin, dto.DateReport));
                 hasPassedSecurity = false;
             }
 
-            // Fourth security check: Aggregated sf Aum and share sum of AuM have same result
+            // Security check 4: Aggregated sf Aum and share sum of AuM have same result
             //if (shareClass == null)
             //{
             //    logger.Error(string.Format(ErrorMessages.InvalidAuM, isin, currency));
