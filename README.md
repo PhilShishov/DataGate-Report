@@ -10,7 +10,7 @@ The main function is automatic feeding of data into an internal database by the 
  ![BashScript](Documentation/SFTP/BashScript.png)
  ![CronJob](Documentation/SFTP/CronJob.png)
  
- 3. Send processed data to DataGate DB to be displayed in web platform
+ 3. Process data: send to DataGate DB to be displayed in web platform or to error folder 
 ![LogResult](Documentation/SFTP/LogResult.png)
 
 ## Technologies
