@@ -4,7 +4,7 @@
     using System.Data;
     using System.IO;
     using System.Linq;
-
+    using System.Runtime.InteropServices;
     using NLog;
     using ReportProcessor.Common;
     using ReportProcessor.Data.Models;
@@ -13,7 +13,7 @@
 
     public class FolderHandler
     {
-        public static void ProcessFolder(string reportDir, string fullFolderPath, Logger logger)
+        public static void ProcessFolder(string reportDir, string fullFolderPath, Logger logger, bool isLinux)
         {
             var fileArray = Directory.EnumerateFiles(fullFolderPath, "*.*")
                 .Where(fn => fn.ToLower().EndsWith(GlobalConstants.ExcelFileExtension) ||
@@ -35,10 +35,18 @@
                     logger.Info(string.Format(InfoMessages.ProcessingFile, currentFileName));
                     var csvList = DataHandler.ProcessData(provider, fullFilePath, logger);
 
+                    string folderOnError = isLinux ?
+                        GlobalConstants.LinuxFolderOnError :
+                        GlobalConstants.WindowsFolderOnError;
+
+                    string folderOnSuccess = isLinux ?
+                       GlobalConstants.LinuxFolderOnSuccess :
+                       GlobalConstants.WindowsFolderOnSuccess;
+
                     if (csvList == null || csvList.Count == 0)
                     {
                         logger.Info(string.Format(InfoMessages.FileMoveError, currentFileName));
-                        File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir));
+                        File.Move(fullFilePath, string.Format(folderOnError + currentFileName, reportDir));
                         logger.Info(string.Format(InfoMessages.LineHeader, reportDir));
                         break;
                     }
@@ -51,14 +59,14 @@
                     if (!isInserted)
                     {
                         logger.Info(string.Format(InfoMessages.FileMoveError, currentFileName));
-                        File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnError + currentFileName, reportDir));
+                        File.Move(fullFilePath, string.Format(folderOnError + currentFileName, reportDir));
                         break;
                     }
 
-                    if (!File.Exists(GlobalConstants.FolderOnSuccess + currentFileName))
+                    if (!File.Exists(folderOnSuccess + currentFileName))
                     {
                         logger.Info(string.Format(InfoMessages.FileMoveSuccess, currentFileName));
-                        File.Move(fullFilePath, string.Format(GlobalConstants.FolderOnSuccess + currentFileName, reportDir));
+                        File.Move(fullFilePath, string.Format(folderOnSuccess + currentFileName, reportDir));
                     }
                 }
                 catch (IOException ex)

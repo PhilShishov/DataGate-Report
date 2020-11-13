@@ -1,6 +1,7 @@
 ﻿namespace ReportProcessor.Core
 {
     using System.IO;
+    using System.Runtime.InteropServices;
     using System.Security.Permissions;
 
     using NLog;
@@ -17,11 +18,13 @@
 
             for (int i = 0; i < folders.Length; i++)
             {
-                // Linux server ubuntu path
-                //string fullPath = Directory.GetDirectoryRoot("home") + string.Format(GlobalConstants.FolderToWatch, folders[i]);
+                bool isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-                // Windows path
-                string fullPath = string.Format(GlobalConstants.FolderToWatch, folders[i]);
+                string linuxFolderToWatch = isLinux ?
+                    GlobalConstants.LinuxFolderToWatch :
+                    GlobalConstants.WindowsFolderToWatch;
+
+                string fullPath = string.Format(linuxFolderToWatch, folders[i]);
                 logger.Info(string.Format(InfoMessages.LineHeader, folders[i]));
                 int empty = Directory.GetFiles(fullPath).Length;
 
@@ -31,7 +34,7 @@
                     continue;
                 }
 
-                FolderHandler.ProcessFolder(folders[i], fullPath, logger);
+                FolderHandler.ProcessFolder(folders[i], fullPath, logger, isLinux);
 
                 logger.Info(string.Format(InfoMessages.CheckedFolder, folders[i]));
             }

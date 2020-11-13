@@ -19,14 +19,14 @@
 
         // Business
         // Linux server paths
-        public const string FolderToWatch = @"/home/ReportsTest/{0}/downloads/";
-        public const string FolderOnSuccess = @"/home/ReportsTest/{0}/historic/";
-        public const string FolderOnError = @"/home/ReportsTest/{0}/error/";
+        public const string LinuxFolderToWatch = @"/home/ReportsTest/{0}/downloads/";
+        public const string LinuxFolderOnSuccess = @"/home/ReportsTest/{0}/historic/";
+        public const string LinuxFolderOnError = @"/home/ReportsTest/{0}/error/";
 
         // Windows paths
-        //public const string FolderToWatch = @"D:/Reports/{0}/downloads/";
-        //public const string FolderOnSuccess = @"D:/Reports/{0}/historic/";
-        //public const string FolderOnError = @"D:/Reports/{0}/error/";
+        public const string WindowsFolderToWatch = @"D:/Reports/{0}/downloads/";
+        public const string WindowsFolderOnSuccess = @"D:/Reports/{0}/historic/";
+        public const string WindowsFolderOnError = @"D:/Reports/{0}/error/";
 
         public const string FolderHeaders = @"Datasets/";
 
