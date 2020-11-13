@@ -1,20 +1,16 @@
 ﻿namespace ReportProcessor.Configuration
 {
-    using System;
-
     using Microsoft.Extensions.Configuration;
-    using ReportProcessor.Common;
 
     public static class BuilderConfiguration
     {
         public static IConfigurationRoot ConfigureBuilder()
         {
-            var environmentName = Environment.GetEnvironmentVariable(GlobalConstants.EnvironmentVariable);
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                //.AddJsonFile($"appsettings.Development.json", false, true)
+                .AddJsonFile($"appsettings.Production.json", false, true)
                 .AddEnvironmentVariables();
             var configuration = builder.Build();
 

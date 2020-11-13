@@ -18,15 +18,15 @@
         public const string RequiredSqlDateTimeFormat = "yyyyMMdd";
 
         // Business
-        // Linux server ubuntu paths
-        //public const string FolderToWatch = @"/home/ReportsTest/{0}/downloads/";
-        //public const string FolderOnSuccess = @"/home/ReportsTest/{0}/historic/";
-        //public const string FolderOnError = @"/home/ReportsTest/{0}/error/";
+        // Linux server paths
+        public const string FolderToWatch = @"/home/ReportsTest/{0}/downloads/";
+        public const string FolderOnSuccess = @"/home/ReportsTest/{0}/historic/";
+        public const string FolderOnError = @"/home/ReportsTest/{0}/error/";
 
-        // Windows server ubuntu paths
-        public const string FolderToWatch = @"D:/Reports/{0}/downloads/";
-        public const string FolderOnSuccess = @"D:/Reports/{0}/historic/";
-        public const string FolderOnError = @"D:/Reports/{0}/error/";
+        // Windows paths
+        //public const string FolderToWatch = @"D:/Reports/{0}/downloads/";
+        //public const string FolderOnSuccess = @"D:/Reports/{0}/historic/";
+        //public const string FolderOnError = @"D:/Reports/{0}/error/";
 
         public const string FolderHeaders = @"Datasets/";
 
