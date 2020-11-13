@@ -24,9 +24,9 @@
         public const string LinuxFolderOnError = @"/home/ReportsTest/{0}/error/";
 
         // Windows paths
-        public const string WindowsFolderToWatch = @"D:/Reports/{0}/downloads/";
-        public const string WindowsFolderOnSuccess = @"D:/Reports/{0}/historic/";
-        public const string WindowsFolderOnError = @"D:/Reports/{0}/error/";
+        public const string WindowsFolderToWatch = @"C:/Reports/{0}/downloads/";
+        public const string WindowsFolderOnSuccess = @"C:/Reports/{0}/historic/";
+        public const string WindowsFolderOnError = @"C:/Reports/{0}/error/";
 
         public const string FolderHeaders = @"Datasets/";
 

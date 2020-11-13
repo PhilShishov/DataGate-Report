@@ -4,7 +4,7 @@
     using System.Data;
     using System.IO;
     using System.Linq;
-    using System.Runtime.InteropServices;
+
     using NLog;
     using ReportProcessor.Common;
     using ReportProcessor.Data.Models;
