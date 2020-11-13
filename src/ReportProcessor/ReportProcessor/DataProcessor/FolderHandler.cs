@@ -18,6 +18,7 @@
             var fileArray = Directory.EnumerateFiles(fullFolderPath, "*.*")
                 .Where(fn => fn.ToLower().EndsWith(GlobalConstants.ExcelFileExtension) ||
                              fn.ToLower().EndsWith(GlobalConstants.CSVFileExtension))
+                .OrderBy(f => f)
                 .ToArray();
 
             logger.Info(string.Format(InfoMessages.CheckingFolder, reportDir));
@@ -48,7 +49,7 @@
                         logger.Info(string.Format(InfoMessages.FileMoveError, currentFileName));
                         File.Move(fullFilePath, string.Format(folderOnError + currentFileName, reportDir));
                         logger.Info(string.Format(InfoMessages.LineHeader, reportDir));
-                        break;
+                        continue;
                     }
 
                     DataTable csvData = csvList.ToDataTable();
@@ -60,7 +61,7 @@
                     {
                         logger.Info(string.Format(InfoMessages.FileMoveError, currentFileName));
                         File.Move(fullFilePath, string.Format(folderOnError + currentFileName, reportDir));
-                        break;
+                        continue;
                     }
 
                     if (!File.Exists(folderOnSuccess + currentFileName))
