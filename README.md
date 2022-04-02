@@ -14,7 +14,7 @@ The main function is automatic feeding of data into an internal database by the 
 ![LogResult](Documentation/SFTP/LogResult.png)
 
 ## Technologies
-* C# .NET Core 3.1
+* C# .NET 6
 * SQL Server, Ubuntu 20.04
 * XML, NLog
 * CsvHelper, ToDataTable
